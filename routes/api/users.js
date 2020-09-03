@@ -7,18 +7,18 @@ const passport = require("passport");
 
 const validateRegisterInput = require("../../validation/register");
 const validateLoginInput = require("../../validation/login");
+const validateProfileInput= require("../../validation/profile");
 
-
-const User = require("../../models/User");
+const User = require("../../models/user");
 
 router.post("/register", (req, res) => {
   
-
+  console.log("Register")
   const { errors, isValid } = validateRegisterInput(req.body);
   if (!isValid) {
     return res.status(400).json(errors);
   }
-
+  
   User.findOne({ email: req.body.email }).then(user => {
     if (user) {
       return res.status(400).json({ email: "Email already exists" });
@@ -92,7 +92,41 @@ router.post("/login", (req, res) => {
           .json({ passwordincorrect: "Password incorrect" });
       }
     });
+
   });
 });
+
+router.get("/profile/:email",(req,res)=>{
+  console.log("profile");
+  User.findOne({"email":req.params.email},function(err, profileInfo){
+            if(err){
+              next(err)
+            }else{
+              res.json({status: "successfull" , message:"Here is your info..." , data:{userdata: profileInfo}})
+            }
+  })
+})
+
+
+
+router.put("/profile/:email",(req,res)=>{
+  
+   const {error, isValid}= validateProfileInput(req.body)     
+   
+   if (!isValid) {
+     console.log("abb")
+    return res.status(400).json(errors);
+  }else{
+    console.log("updateprofile");
+    User.findOneAndUpdate({"email":req.params.email},{name:req.body.name, email:req.body.email, password:req.body.password, firstName: req.body.firstName, lastName: req.body.lastName, dob: req.body.dob, collageName: req.body.collageName, gradYear: req.body.gradYear, gender: req.body.gender, mobileNo: req.body.mobileNo, interests:req.body.interests},function(err,result){
+    if(err){
+      next(err)
+    }else{
+      res.json({status:"successful", message:"Info Updated successfully..", data:null})
+    }
+
+    })
+  }
+ })
 
 module.exports = router;
