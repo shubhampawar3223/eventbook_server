@@ -118,7 +118,7 @@ router.put("/profile/:email",(req,res)=>{
     return res.status(400).json(errors);
   }else{
     console.log("updateprofile");
-    User.findOneAndUpdate({"email":req.params.email},{name:req.body.name, email:req.body.email, password:req.body.password, firstName: req.body.firstName, lastName: req.body.lastName, dob: req.body.dob, collageName: req.body.collageName, gradYear: req.body.gradYear, gender: req.body.gender, mobileNo: req.body.mobileNo, interests:req.body.interests},function(err,result){
+    User.findOneAndUpdate({"email":req.params.email},{name:req.body.name, email:req.body.email, password:req.body.password, firstName: req.body.firstName, lastName: req.body.lastName, dob: req.body.dob, collageName: req.body.collageName, gradYear: req.body.gradYear, gender: req.body.gender, mobileNo: req.body.mobileNo, interest1:req.body.interest1, interest2:req.body.interest2, interest3:req.body.interest3},function(err,result){
     if(err){
       next(err)
     }else{
