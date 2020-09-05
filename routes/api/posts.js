@@ -7,7 +7,6 @@ const Post =  require("../../models/post");
 
 router.get('/allpost',(req,res)=>{
     Post.find()
-    .populate("organizer","_id name")
     .sort('-createdAt')
     .then((posts)=>{
         res.json({posts})
@@ -19,20 +18,20 @@ router.get('/allpost',(req,res)=>{
 
 
 router.post('/createpost',(req,res)=>{
-    const {topic,caption,photo,name,event_url} = req.body 
-    console.log(req.body.topic);
+    const {title,caption,photo,name,event_url} = req.body 
+    console.log(req.body.title);
     console.log(req.body.caption);
     console.log(req.body.photo);
     console.log(req.body.name);
     console.log(req.body.event_url);
-     if(!topic || !body || !photo || !organizer || !event_url){
+     if(!title || !caption || !photo || !name || !event_url){
       return  res.status(422).json({error:"Plase add all the fields"})
      }
     const post = new Post({
-        topic:req.body.topic,
+        title:req.body.title,
         caption:req.body.caption,
         photo:req.body.photo,
-        organizer:req.body.name,
+        name:req.body.name,
         event_url:req.body.event_url
         
     })
@@ -123,3 +122,5 @@ router.delete('/deletepost/:postId',(req,res)=>{
 })
 
 module.exports = router
+
+
